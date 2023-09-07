@@ -1,5 +1,5 @@
 project:
-  name: quickstart-microsoft-wsus
+  name: cfn-ps-microsoft-wsus
   owner: quickstart-eng@amazon.com
   package_lambda: false
   regions:
