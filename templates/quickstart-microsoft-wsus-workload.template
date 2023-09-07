@@ -109,7 +109,7 @@ Parameters:
     ConstraintDescription: Quick Start bucket name can include numbers, lowercase
       letters, uppercase letters, and hyphens (-). It cannot start or end with a hyphen
       (-).
-    Default: aws-quickstart
+    Default: aws-ia-us-east-1
     Description: S3 bucket name for the Quick Start assets. This string can include
       numbers, lowercase letters, uppercase letters, and hyphens (-). It cannot start
       or end with a hyphen (-).
@@ -122,7 +122,7 @@ Parameters:
     AllowedPattern: "^[0-9a-zA-Z-/]*$"
     ConstraintDescription: Quick Start key prefix can include numbers, lowercase letters,
       uppercase letters, hyphens (-), and forward slash (/).
-    Default: quickstart-microsoft-wsus/
+    Default: cfn-ps-microsoft-wsus/
     Description: S3 key prefix for the Quick Start assets. Quick Start key prefix
       can include numbers, lowercase letters, uppercase letters, hyphens (-), and
       forward slash (/).
@@ -247,7 +247,7 @@ Conditions:
     Fn::Equals:
     - Ref: DomainJoin
     - "Yes. Please join WSUS instance to my Active Directory domain."
-  UsingDefaultBucket: !Equals [!Ref QSS3BucketName, 'aws-quickstart']
+  UsingDefaultBucket: !Equals [!Ref QSS3BucketName, 'aws-ia-us-east-1']
 Rules:
   KeyPairsNotEmpty:
     Assertions:
