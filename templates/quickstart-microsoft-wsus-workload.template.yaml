@@ -944,14 +944,16 @@ Resources:
   WSUSRole:
     Type: AWS::IAM::Role
     Metadata:
-      cfn_nag:
-        rules_to_suppress:
-          - id: W11
-            reason: "* required per EC2 documentation"
       cfn_lint:
         config:
           ignore_checks:
             - EIAMPolicyWildcardResource
+          ignore_reasons:
+            - EIAMPolicyWildcardResource: 'required per documentation'
+      cfn_nag:
+        rules_to_suppress:
+          - id: W11
+            reason: "* required per EC2 documentation"
     Properties:
       Policies:
       - PolicyDocument:

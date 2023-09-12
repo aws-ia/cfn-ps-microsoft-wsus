@@ -316,7 +316,7 @@ Resources:
     Properties:
       TemplateURL: 
         Fn::Sub:
-          - 'https://${S3Bucket}.s3.${S3Region}.${AWS::URLSuffix}/${QSS3KeyPrefix}templates/quickstart-microsoft-wsus-workload.template'
+          - 'https://${S3Bucket}.s3.${S3Region}.${AWS::URLSuffix}/${QSS3KeyPrefix}templates/quickstart-microsoft-wsus-workload.template.yaml'
           - S3Region: !If
               - UsingDefaultBucket
               - !Ref AWS::Region
@@ -351,7 +351,7 @@ Resources:
     Type: AWS::CloudFormation::Stack
     Properties:
       TemplateURL: !Sub
-        - https://${QSS3BucketName}.${QSS3Region}.amazonaws.com/${QSS3KeyPrefix}submodules/cfn-ps-microsoft-rdgateway/templates/rdgw-standalone.template
+        - https://${QSS3BucketName}.${QSS3Region}.amazonaws.com/${QSS3KeyPrefix}submodules/cfn-ps-microsoft-rdgateway/templates/rdgw-standalone.template.yaml
         - QSS3Region: !If
             - GovCloudCondition
             - s3-us-gov-west-1
