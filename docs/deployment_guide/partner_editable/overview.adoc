@@ -1,10 +1,18 @@
 This guide covers the information you need to deploy the {partner-product-name} Partner Solution in the AWS Cloud.
 
-// Fill in the info in <angle brackets> for use on the landing page only: 
-This Amazon Web Services (AWS) Partner Solution deploys [<product name>](<partner's marketing product page>) in the AWS Cloud so that <purpose>. This solution is for <target users> who want to <do what> so that <why>. For more information, refer to the [<product name> documentation](<URL>).
+=== WSUS
 
-// Deploying this solution does not guarantee an organization’s compliance with any laws, certifications, policies, or other regulations. [Uncomment this statement only for solutions that relate to compliance. We'll add the corresponding reference part to the landing page and get legal approval before publishing.]
+WSUS is a server role included with Windows Server at no additional cost. It can perform the following functions:
 
-// For advanced information about the product, troubleshooting, or additional functionality, refer to the https://{partner-solution-github-org}.github.io/{partner-solution-project-name}/operational/index.html[Operational Guide^].
+* Download required updates and patches from the internet and act as an internally managed proxy server.
+* Manage clients, including other Windows servers, by defining policies that approve or decline updates and patches, and report compliance status of clients.
 
-// For information about using this Partner Solution for migrations, refer to the https://{partner-solution-github-org}.github.io/{partner-solution-project-name}/migration/index.html[Migration Guide^].
+Windows operating systems can directly acquire Microsoft updates from the internet, or they can be configured to acquire updates from a WSUS endpoint. AWS customers can deploy WSUS as a centralized Microsoft update repository.
+
+=== WSUS on AWS
+
+This solution deploys a WSUS endpoint for downloading updates. Client and policy management can be performed by AWS Systems Manager or by the traditional WSUS console with Microsoft Active Directory Group Policy.
+
+Conventionally, system administrators often rely on Active Directory Group Policy or Microsoft System Center Configuration Manager (SCCM) to manage WSUS clients. This requires servers and workstations to be Active Directory domain-joined and can include the complexity and cost of using SCCM.
+
+This solution is designed to use Systems Manager for deployment, configuration, management, and consumption of WSUS. This includes both Active Directory domain-joined and standalone Windows clients.

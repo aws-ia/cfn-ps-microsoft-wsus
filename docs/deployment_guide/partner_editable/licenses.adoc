@@ -1,3 +1,6 @@
 // Include details about any licenses and how to sign up. Provide links as appropriate.
 
 There is no cost to use this Partner Solution, but you will be billed for any AWS services or resources that this Partner Solution deploys. For more information, refer to the https://fwd.aws/rA69w?[AWS Partner Solution General Information Guide^].
+
+By default, this solution deploys WSUS on a single Windows instance, using a license-included Amazon Machine Image (AMI). Windows licensing cost is paid through a Service Provider Licensing Agreement (SPLA) and is included in your monthly AWS bill. 
+You can optionally choose to use Microsoft SQL Server Standard Edition for the WSUS database. In this case, WSUS is deployed on a single Windows instance, using the license-included SQL Server Standard on Windows AMI. All licensing costs are added to your monthly AWS bill.

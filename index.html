@@ -5,9 +5,9 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="generator" content="Asciidoctor 2.0.20">
-<meta name="description" content="Full Product Name Deployment Guide on AWS">
-<meta name="keywords" content="Partner Solution, AWS, Full Product Name">
-<title>Full Product Name on AWS</title>
+<meta name="description" content="Windows Server Update Services Deployment Guide on AWS">
+<meta name="keywords" content="Partner Solution, AWS, Windows Server Update Services">
+<title>Windows Server Update Services on AWS</title>
 <style>
 /* Asciidoctor default stylesheet | MIT License | https://asciidoctor.org */
 /* Uncomment @import statement to use as custom stylesheet */
@@ -854,13 +854,22 @@ p.footer-text a{color:#d7d8d8}
 <div id="toc" class="toc2">
 <div id="toctitle"></div>
 <ul class="sectlevel1">
-<li><a href="#_overview">Overview</a></li>
+<li><a href="#_overview">Overview</a>
+<ul class="sectlevel2">
+<li><a href="#_wsus">WSUS</a></li>
+<li><a href="#_wsus_on_aws">WSUS on AWS</a></li>
+</ul>
+</li>
 <li><a href="#_costs_and_licenses">Costs and licenses</a></li>
 <li><a href="#_architecture">Architecture</a></li>
 <li><a href="#_deployment_options">Deployment options</a></li>
-<li><a href="#_predeployment_steps">Predeployment steps</a></li>
 <li><a href="#_deployment_steps">Deployment steps</a></li>
-<li><a href="#_postdeployment_steps">Postdeployment steps</a></li>
+<li><a href="#_postdeployment_steps">Postdeployment steps</a>
+<ul class="sectlevel2">
+<li><a href="#_test_the_deployment">Test the deployment</a></li>
+<li><a href="#_best_practices_for_testing_and_using_wsus_on_aws">Best practices for testing and using WSUS on AWS</a></li>
+</ul>
+</li>
 <li><a href="#_troubleshooting">Troubleshooting</a></li>
 <li><a href="#_customer_responsibility">Customer responsibility</a></li>
 <li><a href="#_feedback">Feedback</a></li>
@@ -871,7 +880,7 @@ p.footer-text a{color:#d7d8d8}
 <div id="content">
 <div id="preamble">
 <div class="sectionbody">
-<h2 id="_full_product_name_on_aws" class="discrete text-center">Full Product Name on AWS</h2>
+<h2 id="_windows_server_update_services_on_aws" class="discrete text-center">Windows Server Update Services on AWS</h2>
 <h2 id="_partner_solution_deployment_guide" class="discrete text-left text-center">Partner Solution Deployment Guide</h2>
 <div class="imageblock text-center">
 <div class="content">
@@ -879,14 +888,12 @@ p.footer-text a{color:#d7d8d8}
 </div>
 </div>
 <div class="paragraph text-center">
-<p><strong>January 2023</strong><br>
-<em>John Smith, Example Company Name, Ltd.</em><br>
-<em>Janine Singh, AWS IoT Partner team</em><br>
-<em>Toni Jones, AWS Integration &amp; Automation team</em><br></p>
+<p><strong>December 2023</strong><br>
+<em>Sepehr Samiei and Dave May, AWS</em><br></p>
 </div>
 <div class="imageblock text-left image-container">
 <div class="content">
-<img src="https://aws-quickstart.s3.amazonaws.com/partner-solution-repo-name/docs/boilerplate/.images/aws-quickstart-graphic.png" alt="">
+<img src="https://aws-quickstart.s3.amazonaws.com/cfn-ps-microsoft-wsus/docs/boilerplate/.images/aws-quickstart-graphic.png" alt="">
 </div>
 </div>
 <div class="admonitionblock tip">
@@ -896,13 +903,13 @@ p.footer-text a{color:#d7d8d8}
 <i class="fa icon-tip" title="Tip"></i>
 </td>
 <td class="content">
-Refer to the <a href="https://github.com/aws-ia/partner-solution-repo-name" target="_blank" rel="noopener">GitHub repository</a> to view source files, report bugs, submit feature ideas, and post feedback about this Partner Solution. To comment on the documentation, refer to <a href="#_feedback">Feedback</a>.
+Refer to the <a href="https://github.com/aws-ia/cfn-ps-microsoft-wsus" target="_blank" rel="noopener">GitHub repository</a> to view source files, report bugs, submit feature ideas, and post feedback about this Partner Solution. To comment on the documentation, refer to <a href="#_feedback">Feedback</a>.
 </td>
 </tr>
 </table>
 </div>
 <div class="paragraph text-left">
-<p>This Partner Solution was created by Example Company Name, Ltd. in collaboration with Amazon Web Services (AWS). <a href="https://aws.amazon.com/solutions/partners/" target="_blank" rel="noopener">Partner Solutions</a> are automated reference deployments that help people deploy popular technologies on AWS according to AWS best practices. If you&#8217;re unfamiliar with AWS Partner Solutions, refer to the <a href="https://fwd.aws/rA69w?" target="_blank" rel="noopener">AWS Partner Solution General Information Guide</a>.</p>
+<p>This Partner Solution was created by Amazon Web Services (AWS). <a href="https://aws.amazon.com/solutions/partners/" target="_blank" rel="noopener">Partner Solutions</a> are automated reference deployments that help people deploy popular technologies on AWS according to AWS best practices. If you&#8217;re unfamiliar with AWS Partner Solutions, refer to the <a href="https://fwd.aws/rA69w?" target="_blank" rel="noopener">AWS Partner Solution General Information Guide</a>.</p>
 </div>
 </div>
 </div>
@@ -910,10 +917,38 @@ Refer to the <a href="https://github.com/aws-ia/partner-solution-repo-name" targ
 <h2 id="_overview">Overview</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>This guide covers the information you need to deploy the Full Product Name Partner Solution in the AWS Cloud.</p>
+<p>This guide covers the information you need to deploy the Windows Server Update Services Partner Solution in the AWS Cloud.</p>
+</div>
+<div class="sect2">
+<h3 id="_wsus">WSUS</h3>
+<div class="paragraph">
+<p>WSUS is a server role included with Windows Server at no additional cost. It can perform the following functions:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Download required updates and patches from the internet and act as an internally managed proxy server.</p>
+</li>
+<li>
+<p>Manage clients, including other Windows servers, by defining policies that approve or decline updates and patches, and report compliance status of clients.</p>
+</li>
+</ul>
 </div>
 <div class="paragraph">
-<p>This Amazon Web Services (AWS) Partner Solution deploys [&lt;product name&gt;](&lt;partner&#8217;s marketing product page&gt;) in the AWS Cloud so that &lt;purpose&gt;. This solution is for &lt;target users&gt; who want to &lt;do what&gt; so that &lt;why&gt;. For more information, refer to the [&lt;product name&gt; documentation](&lt;URL&gt;).</p>
+<p>Windows operating systems can directly acquire Microsoft updates from the internet, or they can be configured to acquire updates from a WSUS endpoint. AWS customers can deploy WSUS as a centralized Microsoft update repository.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_wsus_on_aws">WSUS on AWS</h3>
+<div class="paragraph">
+<p>This solution deploys a WSUS endpoint for downloading updates. Client and policy management can be performed by AWS Systems Manager or by the traditional WSUS console with Microsoft Active Directory Group Policy.</p>
+</div>
+<div class="paragraph">
+<p>Conventionally, system administrators often rely on Active Directory Group Policy or Microsoft System Center Configuration Manager (SCCM) to manage WSUS clients. This requires servers and workstations to be Active Directory domain-joined and can include the complexity and cost of using SCCM.</p>
+</div>
+<div class="paragraph">
+<p>This solution is designed to use Systems Manager for deployment, configuration, management, and consumption of WSUS. This includes both Active Directory domain-joined and standalone Windows clients.</p>
+</div>
 </div>
 </div>
 </div>
@@ -923,20 +958,24 @@ Refer to the <a href="https://github.com/aws-ia/partner-solution-repo-name" targ
 <div class="paragraph">
 <p>There is no cost to use this Partner Solution, but you will be billed for any AWS services or resources that this Partner Solution deploys. For more information, refer to the <a href="https://fwd.aws/rA69w?" target="_blank" rel="noopener">AWS Partner Solution General Information Guide</a>.</p>
 </div>
+<div class="paragraph">
+<p>By default, this solution deploys WSUS on a single Windows instance, using a license-included Amazon Machine Image (AMI). Windows licensing cost is paid through a Service Provider Licensing Agreement (SPLA) and is included in your monthly AWS bill.
+You can optionally choose to use Microsoft SQL Server Standard Edition for the WSUS database. In this case, WSUS is deployed on a single Windows instance, using the license-included SQL Server Standard on Windows AMI. All licensing costs are added to your monthly AWS bill.</p>
+</div>
 </div>
 </div>
 <div class="sect1">
 <h2 id="_architecture">Architecture</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>Deploying this Partner Solution with default parameters builds the following Product Name environment in the
+<p>Deploying this Partner Solution with default parameters builds the following WSUS environment in the
 AWS Cloud.</p>
 </div>
 <div id="architecture1" class="imageblock">
 <div class="content">
-<img src="docs/deployment_guide/images/architecture_diagram.png" alt="Architecture">
+<img src="docs/deployment_guide/images/image1.png" alt="Architecture">
 </div>
-<div class="title">Figure 1. Partner Solution architecture for Product Name on AWS</div>
+<div class="title">Figure 1. Partner Solution architecture for WSUS on AWS</div>
 </div>
 <div class="paragraph">
 <p>As shown in <a href="#architecture1">Figure 1</a>, this Partner Solution sets up the following:</p>
@@ -944,42 +983,16 @@ AWS Cloud.</p>
 <div class="ulist">
 <ul>
 <li>
-<p>A highly available architecture that spans two Availability Zones.*</p>
+<p>A VPC configured with public and private subnets according to AWS best practices, to provide you with your own virtual network on AWS.*</p>
 </li>
 <li>
-<p>A virtual private cloud (VPC) configured with public and private subnets, according to AWS
-best practices, to provide you with your own virtual network on AWS.*</p>
+<p>In the public subnets, managed network address translation (NAT) gateways to allow outbound internet access for resources in the private subnets.*</p>
 </li>
 <li>
-<p>In the public subnets:</p>
-<div class="ulist">
-<ul>
-<li>
-<p>Managed network address translation (NAT) gateways to allow outbound
-internet access for resources in the private subnets.*</p>
+<p>In the private subnet, a Windows instance with the WSUS role configured on it. WSUS can then be managed by using either Systems Manager Automation or the traditional WSUS console.</p>
 </li>
 <li>
-<p>A Linux bastion host in an Auto Scaling group to allow inbound Secure
-Shell (SSH) access to Amazon Elastic Compute Cloud (Amazon EC2) instances in public and private subnets.*</p>
-</li>
-</ul>
-</div>
-</li>
-<li>
-<p>In the private subnets:</p>
-<div class="ulist">
-<ul>
-<li>
-<p>&lt;item&gt;.</p>
-</li>
-<li>
-<p>&lt;item&gt;.</p>
-</li>
-</ul>
-</div>
-</li>
-<li>
-<p>&lt;describe any additional components&gt;.</p>
+<p>Optionally, a Remote Desktop Gateway (RD Gateway) in an Auto Scaling group in the public subnets for remote access to the WSUS instance.</p>
 </li>
 </ul>
 </div>
@@ -997,22 +1010,16 @@ Shell (SSH) access to Amazon Elastic Compute Cloud (Amazon EC2) instances in pub
 <div class="ulist">
 <ul>
 <li>
-<p><a href="https://qs_launch_permalink" target="_blank" rel="noopener">Deploy Product Name into a new VPC</a>. This option builds a new AWS environment that consists of the VPC, subnets, NAT gateways, security groups, bastion hosts, and other infrastructure components. It then deploys Product Name into this new VPC.</p>
+<p><a href="https://fwd.aws/XAKyq?" target="_blank" rel="noopener">Deploy WSUS into a new VPC</a>. This option builds a new AWS environment that consists of the VPC, subnets, NAT gateways, security groups, bastion hosts, and other infrastructure components. It then deploys WSUS into this new VPC.</p>
 </li>
 <li>
-<p><a href="https://qs_launch_permalink" target="_blank" rel="noopener">Deploy Product Name into an existing VPC</a>. This option provisions Product Name in your existing AWS infrastructure.</p>
+<p><a href="https://fwd.aws/P4W7a?" target="_blank" rel="noopener">Deploy WSUS into an existing VPC</a>. This option provisions WSUS in your existing AWS infrastructure.</p>
 </li>
 </ul>
 </div>
 <div class="paragraph">
-<p>This Partner Solution provides separate templates for these options. It also lets you configure Classless Inter-Domain Routing (CIDR) blocks, instance types, and Product Name settings.</p>
+<p>This Partner Solution provides separate templates for these options. It also lets you configure Classless Inter-Domain Routing (CIDR) blocks, instance types, and WSUS settings.</p>
 </div>
-</div>
-</div>
-<div class="sect1">
-<h2 id="_predeployment_steps">Predeployment steps</h2>
-<div class="sectionbody">
-
 </div>
 </div>
 <div class="sect1">
@@ -1051,22 +1058,101 @@ Unless you&#8217;re customizing the Partner Solution templates or are instructed
 <p>On the <strong>Review</strong> page, review and confirm the template settings. Under <strong>Capabilities</strong>, select all of the check boxes to acknowledge that the template creates AWS Identity and Access Management (IAM)  resources that might require the ability to automatically expand macros.</p>
 </li>
 <li>
-<p>Choose <strong>Create stack</strong>. The stack takes about 15 minutes to deploy.</p>
+<p>Choose <strong>Create stack</strong>. The stack takes about 30 minutes to deploy.</p>
 </li>
 <li>
-<p>Monitor the stack&#8217;s status, and when the status is <strong>CREATE_COMPLETE</strong>, the Full Product Name deployment is ready.</p>
+<p>Monitor the stack&#8217;s status, and when the status is <strong>CREATE_COMPLETE</strong>, the Windows Server Update Services deployment is ready.</p>
 </li>
 <li>
 <p>To view the created resources, choose the <strong>Outputs</strong> tab.</p>
 </li>
 </ol>
 </div>
+<div id="postdeploy1" class="imageblock">
+<div class="content">
+<img src="docs/deployment_guide/images/image2.png" alt="postdeploy1">
+</div>
+<div class="title">Figure 2. WSUS outputs after successful deployment</div>
+</div>
 </div>
 </div>
 <div class="sect1">
 <h2 id="_postdeployment_steps">Postdeployment steps</h2>
 <div class="sectionbody">
-
+<div class="sect2">
+<h3 id="_test_the_deployment">Test the deployment</h3>
+<div class="paragraph">
+<p>Once the CloudFormation stack creation is completed, your WSUS instance is deployed and configured. To test or use it, perform the following steps:</p>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>Approve or deny updates and patches for target computer groups.</p>
+</li>
+</ol>
+</div>
+<div class="olist arabic">
+<ol class="arabic" start="2">
+<li>
+<p>Wait until WSUS synchronization completes, and all approved updates are downloaded.</p>
+</li>
+<li>
+<p>Point other servers and workstations to your WSUS instance as the update point.</p>
+</li>
+<li>
+<p>Trigger updates on WSUS clients.</p>
+</li>
+</ol>
+</div>
+<div class="paragraph">
+<p>You can perform these steps in multiple ways. The next section describes best practices for performing these steps on AWS.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_best_practices_for_testing_and_using_wsus_on_aws">Best practices for testing and using WSUS on AWS</h3>
+<div class="paragraph">
+<p>Systems Manager helps you to enhance operations on the WSUS server and also its clients.</p>
+</div>
+<div class="sect3">
+<h4 id="_approve_or_deny_updates_and_patches">Approve or deny updates and patches</h4>
+<div class="paragraph">
+<p>To securely approve or deny updates on the WSUS server, or to perform other server-side operations, use <a href="https://docs.aws.amazon.com/systems-manager/latest/userguide/execute-remote-commands.html">AWS Systems Manager Run Command</a> or <a href="https://docs.aws.amazon.com/systems-manager/latest/userguide/session-manager.html">AWS Systems Manager Session Manager</a>. Run Command enables you to securely run Windows PowerShell cmdlets or scripts on target servers. Session Manager allows you to do the same thing using an interactive session.</p>
+</div>
+<div class="paragraph">
+<p>A <a href="https://github.com/aws-quickstart/quickstart-microsoft-wsus/blob/master/scripts/approve-updates.ps1">sample PowerShell script</a> is included in the GitHub repository for this Quick Start. You can modify this script and run it on your WSUS instance by using Systems Manager Run Command or Session Manager. If you deployed this WSUS Quick Start with the optional RD Gateway Auto Scaling group, you can use Remote Desktop Protocol (RDP) to connect from the RD Gateway to the WSUS server and use the traditional WSUS console. If you did not deploy the Quick Start with the RD Gateway Auto Scaling group, you can use the <a href="https://aws.amazon.com/blogs/aws/new-port-forwarding-using-aws-system-manager-sessions-manager/">Session Manager Port Forwarding</a> document to establish an RDP session directly to the WSUS server.</p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_point_other_servers_and_workstations_to_your_wsus_instance">Point other servers and workstations to your WSUS instance</h4>
+<div class="paragraph">
+<p>To configure WSUS clients to use the WSUS endpoint, use <a href="https://docs.aws.amazon.com/systems-manager/latest/userguide/systems-manager-state.html">AWS Systems Manager State Manager</a> or Run Command. For both standalone and domain-joined Windows instances, you can use <a href="https://gallery.technet.microsoft.com/scriptcenter/Set-ClientWSUSSetting-2e84b805">Set-ClientWSUSSetting.ps1</a> for this purpose (in this case, the easiest way is to remove the first and last lines to convert the function into a script file).</p>
+</div>
+<div id="postdeploy2" class="imageblock">
+<div class="content">
+<img src="docs/deployment_guide/images/image3.png" alt="postdeploy2">
+</div>
+<div class="title">Figure 3. Using State Manager to configure WSUS clients</div>
+</div>
+<div class="paragraph">
+<p>Figure 3: Using State Manager to configure WSUS clients</p>
+</div>
+<div class="paragraph">
+<p>For domain-joined Windows instances, you can also use Group Policy Objects (GPO) to configure WSUS client settings.</p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_trigger_updates_on_wsus_clients">Trigger updates on WSUS clients</h4>
+<div class="paragraph">
+<p>To define patch baselines, use <a href="https://docs.aws.amazon.com/systems-manager/latest/userguide/systems-manager-patch.html">AWS Systems Manager Patch Manager</a>. To regularly and automatically trigger updates on WSUS clients, use <a href="https://docs.aws.amazon.com/systems-manager/latest/userguide/systems-manager-maintenance.html">AWS Systems Manager Maintenance Windows</a> to schedule <a href="https://docs.aws.amazon.com/systems-manager/latest/userguide/execute-remote-commands.html">Run Command</a> or <a href="https://docs.aws.amazon.com/systems-manager/latest/userguide/systems-manager-state.html">State Manager</a> tasks.</p>
+</div>
+<div id="postdeploy3" class="imageblock">
+<div class="content">
+<img src="docs/deployment_guide/images/image4.png" alt="postdeploy3">
+</div>
+<div class="title">Figure 4. Install Windows Updates Systems Manager document</div>
+</div>
+</div>
+</div>
 </div>
 </div>
 <div class="sect1">
@@ -1089,21 +1175,21 @@ Unless you&#8217;re customizing the Partner Solution templates or are instructed
 <h2 id="_feedback">Feedback</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>To submit feature ideas and report bugs, use the <strong>Issues</strong> section of the <a href="https://github.com/aws-ia/partner-solution-repo-name" target="_blank" rel="noopener">GitHub repository</a> for this Partner Solution. To submit code, refer to the <a href="https://fwd.aws/NwqYA?" target="_blank" rel="noopener">Partner Solution Contributor&#8217;s Guide</a>. To submit feedback on this deployment guide, use the following GitHub links:</p>
+<p>To submit feature ideas and report bugs, use the <strong>Issues</strong> section of the <a href="https://github.com/aws-ia/cfn-ps-microsoft-wsus" target="_blank" rel="noopener">GitHub repository</a> for this Partner Solution. To submit code, refer to the <a href="https://fwd.aws/NwqYA?" target="_blank" rel="noopener">Partner Solution Contributor&#8217;s Guide</a>. To submit feedback on this deployment guide, use the following GitHub links:</p>
 </div>
 <div class="ulist">
 <ul>
 <li>
-<p><a href="https://github.com/aws-ia/partner-solution-repo-name/issues/new?labels=documentation,grammar+or+spelling&amp;title=Deployment+guide+feedback&amp;body=Section+heading:%0ADocumentation+issue+description:%0A" target="_blank" rel="noopener">Grammar or spelling</a></p>
+<p><a href="https://github.com/aws-ia/cfn-ps-microsoft-wsus/issues/new?labels=documentation,grammar+or+spelling&amp;title=Deployment+guide+feedback&amp;body=Section+heading:%0ADocumentation+issue+description:%0A" target="_blank" rel="noopener">Grammar or spelling</a></p>
 </li>
 <li>
-<p><a href="https://github.com/aws-ia/partner-solution-repo-name/issues/new?labels=documentation,broken+link&amp;title=Deployment+guide+feedback&amp;body=Section+heading:%0ADocumentation+issue+description:%0A" target="_blank" rel="noopener">Broken link</a></p>
+<p><a href="https://github.com/aws-ia/cfn-ps-microsoft-wsus/issues/new?labels=documentation,broken+link&amp;title=Deployment+guide+feedback&amp;body=Section+heading:%0ADocumentation+issue+description:%0A" target="_blank" rel="noopener">Broken link</a></p>
 </li>
 <li>
-<p><a href="https://github.com/aws-ia/partner-solution-repo-name/issues/new?labels=documentation,inaccurate+content&amp;title=Deployment+guide+feedback&amp;body=Section+heading:%0ADocumentation+issue+description:%0A" target="_blank" rel="noopener">Inaccurate content</a></p>
+<p><a href="https://github.com/aws-ia/cfn-ps-microsoft-wsus/issues/new?labels=documentation,inaccurate+content&amp;title=Deployment+guide+feedback&amp;body=Section+heading:%0ADocumentation+issue+description:%0A" target="_blank" rel="noopener">Inaccurate content</a></p>
 </li>
 <li>
-<p><a href="https://github.com/aws-ia/partner-solution-repo-name/issues/new?labels=documentation,display+and+design&amp;title=Deployment+guide+feedback&amp;body=Section+heading:%0ADocumentation+issue+description:%0A" target="_blank" rel="noopener">Display or design</a></p>
+<p><a href="https://github.com/aws-ia/cfn-ps-microsoft-wsus/issues/new?labels=documentation,display+and+design&amp;title=Deployment+guide+feedback&amp;body=Section+heading:%0ADocumentation+issue+description:%0A" target="_blank" rel="noopener">Display or design</a></p>
 </li>
 </ul>
 </div>
@@ -1126,7 +1212,7 @@ Unless you&#8217;re customizing the Partner Solution templates or are instructed
         <!-- We can use document attributes: -->
         <!-- Generated with Asciidoctor v2.0.20. -->
         <a href="https://aws.amazon.com/privacy/">Privacy</a> | <a href="https://aws.amazon.com/terms/">Site terms</a> |
-        &copy; {current-year}, Amazon Web Services, Inc. or its affiliates and Example Company Name, Ltd.. All rights reserved.
+        &copy; {current-year}, Amazon Web Services, Inc. or its affiliates. All rights reserved.
     </p>
 </footer>
 </body>
