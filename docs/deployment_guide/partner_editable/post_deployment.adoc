@@ -1,3 +1,51 @@
 // Include any postdeployment steps here, such as steps necessary to test that the deployment was successful. If there are no postdeployment steps, leave this file empty.
 
+[#postdeploy1]
+.WSUS outputs after successful deployment
+image::../docs/deployment_guide/images/image2.png[postdeploy1]
+
 == Postdeployment steps
+
+=== Test the deployment
+
+Once the CloudFormation stack creation is completed, your WSUS instance is deployed and configured. To test or use it, perform the following steps:
+
+[arabic]
+. Approve or deny updates and patches for target computer groups.
+
+[arabic, start=2]
+. Wait until WSUS synchronization completes, and all approved updates are downloaded.
+. Point other servers and workstations to your WSUS instance as the update point.
+. Trigger updates on WSUS clients.
+
+You can perform these steps in multiple ways. The next section describes best practices for performing these steps on AWS.
+
+=== Best practices for testing and using WSUS on AWS
+
+Systems Manager helps you to enhance operations on the WSUS server and also its clients.
+
+==== Approve or deny updates and patches
+
+To securely approve or deny updates on the WSUS server, or to perform other server-side operations, use https://docs.aws.amazon.com/systems-manager/latest/userguide/execute-remote-commands.html[AWS Systems Manager Run Command] or https://docs.aws.amazon.com/systems-manager/latest/userguide/session-manager.html[AWS Systems Manager Session Manager]. Run Command enables you to securely run Windows PowerShell cmdlets or scripts on target servers. Session Manager allows you to do the same thing using an interactive session.
+
+A https://github.com/aws-quickstart/quickstart-microsoft-wsus/blob/master/scripts/approve-updates.ps1[sample PowerShell script] is included in the GitHub repository for this Quick Start. You can modify this script and run it on your WSUS instance by using Systems Manager Run Command or Session Manager. If you deployed this WSUS Quick Start with the optional RD Gateway Auto Scaling group, you can use Remote Desktop Protocol (RDP) to connect from the RD Gateway to the WSUS server and use the traditional WSUS console. If you did not deploy the Quick Start with the RD Gateway Auto Scaling group, you can use the https://aws.amazon.com/blogs/aws/new-port-forwarding-using-aws-system-manager-sessions-manager/[Session Manager Port Forwarding] document to establish an RDP session directly to the WSUS server.
+
+==== Point other servers and workstations to your WSUS instance
+
+To configure WSUS clients to use the WSUS endpoint, use https://docs.aws.amazon.com/systems-manager/latest/userguide/systems-manager-state.html[AWS Systems Manager State Manager] or Run Command. For both standalone and domain-joined Windows instances, you can use https://gallery.technet.microsoft.com/scriptcenter/Set-ClientWSUSSetting-2e84b805[Set-ClientWSUSSetting.ps1] for this purpose (in this case, the easiest way is to remove the first and last lines to convert the function into a script file).
+
+[#postdeploy2]
+.Using State Manager to configure WSUS clients
+image::../docs/deployment_guide/images/image3.png[postdeploy2]
+
+Figure 3: Using State Manager to configure WSUS clients
+
+For domain-joined Windows instances, you can also use Group Policy Objects (GPO) to configure WSUS client settings.
+
+==== Trigger updates on WSUS clients
+
+To define patch baselines, use https://docs.aws.amazon.com/systems-manager/latest/userguide/systems-manager-patch.html[AWS Systems Manager Patch Manager]. To regularly and automatically trigger updates on WSUS clients, use https://docs.aws.amazon.com/systems-manager/latest/userguide/systems-manager-maintenance.html[AWS Systems Manager Maintenance Windows] to schedule https://docs.aws.amazon.com/systems-manager/latest/userguide/execute-remote-commands.html[Run Command] or https://docs.aws.amazon.com/systems-manager/latest/userguide/systems-manager-state.html[State Manager] tasks.
+
+[#postdeploy3]
+.Install Windows Updates Systems Manager document
+image::../docs/deployment_guide/images/image4.png[postdeploy3]
