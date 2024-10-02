@@ -1,4 +1,8 @@
-# quickstart-microsoft-wsus
+## Deprecation Notice
+
+:x: This repository is subject to deprecation in Q4 2024. For more details, [please review this announcement](https://github.com/aws-ia/.announcements/issues/1). 
+
+## quickstart-microsoft-wsus
 ## Windows Server Update Services (WSUS) on AWS
 
 This Quick Start deploys a Windows Server Update Services (WSUS) endpoint for downloading and managing updates on the Amazon Web Services (AWS) Cloud. This Quick Start is for system administrators and IT engineers who need to use WSUS as the endpoint where Windows servers and other Microsoft applications are authorized to acquire updates.
